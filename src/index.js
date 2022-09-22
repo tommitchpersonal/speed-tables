@@ -1,17 +1,251 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+class BorderSquare extends React.Component {
+  render() {
+    return (
+      <div className='border-square'>
+        {this.props.value}
+      </div> 
+    );
+  }
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+class Square extends React.Component {
+
+  isCorrect() {
+    return true;
+  }
+
+  render() {
+
+    let isCorrect = this.isCorrect();
+
+    return (
+      <div className='square' background='green' contentEditable={true}>
+      </div>
+    )
+  }
+}
+
+class Grid extends React.Component{
+
+  renderBorderSquare(i) {
+    return <BorderSquare value={i} />;
+  }
+
+  renderSquare(){
+    return <Square />;
+  }
+
+  render() {
+    return(
+      <div>
+        <div className='board-row'>
+          {this.renderBorderSquare(null)}
+          {this.renderBorderSquare(1)}
+          {this.renderBorderSquare(2)}
+          {this.renderBorderSquare(3)}
+          {this.renderBorderSquare(4)}
+          {this.renderBorderSquare(5)}
+          {this.renderBorderSquare(6)}
+          {this.renderBorderSquare(7)}
+          {this.renderBorderSquare(8)}
+          {this.renderBorderSquare(9)}
+          {this.renderBorderSquare(10)}
+          {this.renderBorderSquare(11)}
+          {this.renderBorderSquare(12)}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(1)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(2)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(3)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(4)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(5)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(6)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(7)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(8)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(9)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(10)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(11)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+        <div className='board-row'>
+          {this.renderBorderSquare(12)}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+          {this.renderSquare()}
+        </div>
+      </div>
+    );
+  }
+}
+
+
+
+
+// ================================================================================
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Grid />);
