@@ -1,4 +1,3 @@
-import { getSelectionRange } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -16,15 +15,14 @@ class Square extends React.Component {
 
       xValue: props.xValue,
       yValue: props.yValue,
-
-      isCorrect: false
     }
   }
 
+  isCorrect() {
+    return (this.state.content == this.state.xValue * this.state.yValue);
+  }
+
   render() {
-
-    console.log(this.state.xValue, this.state.yValue);
-
     let color = 'grey';
     let content = null;
     let isEditable = false;
@@ -37,7 +35,7 @@ class Square extends React.Component {
     else if (this.state.xPosition === 0) {
       color = 'grey';
       content = this.state.yValue;
-      isEditable = false
+      isEditable = false;
     }
     else if (this.state.yPosition === 0) {
       color = 'grey';
@@ -45,20 +43,22 @@ class Square extends React.Component {
       isEditable = false;
     }
     else {
-      color = this.isCorrect ? 'green' : 'red';
+      let isCorrect = this.isCorrect();
+      color = isCorrect ? 'green' : 'red';
       content = null;
-      isEditable = true;
+      isEditable = !isCorrect;
     }
 
-    return (
-      <div className='square' contentEditable={isEditable}
+    return( 
+      <div className='square' 
+      contentEditable={isEditable} 
+      onInput={ e => this.setState({content: e.currentTarget.textContent})}
       style={{
         backgroundColor: color
       }}>
         {content}
       </div>
-      )
-    
+    )  
   }
 }
 
@@ -67,7 +67,8 @@ class App extends React.Component{
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+    };
   }
 
   componentDidMount() {
@@ -81,6 +82,7 @@ class App extends React.Component{
   render() {
 
     if (this.state.horizontalNumbers && this.state.verticalNumbers) {
+
       return(
         <Grid horizontalNumbers={this.state.horizontalNumbers} verticalNumbers={this.state.verticalNumbers}/>
       )
@@ -127,9 +129,6 @@ class Grid extends React.Component{
     const columnLength = this.state.verticalNumbers.length + 1;
 
     const grid =  this.twoDimensionArray(rowLength, columnLength);
-
-    console.log(rowLength);
-    console.log(columnLength);
 
     for (var i = 0; i < rowLength; i++) { 
       for(var j = 0; j < columnLength; j++) {
