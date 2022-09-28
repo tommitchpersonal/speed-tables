@@ -8,56 +8,55 @@ class Square extends React.Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      xPosition: props.xPosition,
-      yPosition: props.yPosition,
-
-      xValue: props.xValue,
-      yValue: props.yValue,
+    this.handleChange=this.handleChange.bind(this);
+    this.state = {};
     }
+
+  handleChange(e) {
+    this.setState({value: e.target.value});
+    this.props.onContentChange(this.props.xPosition, this.props.yPosition, this.props.xValue, this.props.yValue, e.target.value);
   }
 
   isCorrect() {
-    return (this.state.content == this.state.xValue * this.state.yValue);
+    return (this.state.value == this.props.xValue * this.props.yValue);
   }
 
   render() {
     let color = 'grey';
-    let content = null;
+    let content = undefined;
     let isEditable = false;
 
-    if (this.state.xPosition === 0 && this.state.yPosition === 0){
+    if (this.props.xPosition === 0 && this.props.yPosition === 0){
       color = 'grey';
-      content = null;
+      content = undefined;
       isEditable = false;
     }
-    else if (this.state.xPosition === 0) {
+    else if (this.props.xPosition === 0) {
       color = 'grey';
-      content = this.state.yValue;
+      content = this.props.yValue;
       isEditable = false;
     }
-    else if (this.state.yPosition === 0) {
+    else if (this.props.yPosition === 0) {
       color = 'grey';
-      content = this.state.xValue;
+      content = this.props.xValue;
       isEditable = false;
     }
     else {
       let isCorrect = this.isCorrect();
       color = isCorrect ? 'green' : 'red';
-      content = null;
       isEditable = !isCorrect;
     }
 
     return( 
-      <div className='square' 
-      contentEditable={isEditable} 
-      onInput={ e => this.setState({content: e.currentTarget.textContent})}
+      <input 
+      className='square' 
+      disabled={!isEditable}
+      disabledInputStyle={{opacity: 1}}
+      value={content} 
+      onChange={this.handleChange}
       style={{
         backgroundColor: color
-      }}>
-        {content}
-      </div>
+      }}/>
     )  
   }
 }
@@ -71,33 +70,21 @@ class App extends React.Component{
     };
   }
 
-  componentDidMount() {
-    invoke('get_random_array', {arraySize :12})
-     .then(horizontalNumbers => this.setState({horizontalNumbers}))
-    
-    invoke('get_random_array', {arraySize :12})
-      .then(verticalNumbers => this.setState({verticalNumbers}))
-  }
+  generateGrid(horizontalNumbers, verticalNumbers) {
+    const rowLength = horizontalNumbers.length + 1;
+    const columnLength = verticalNumbers.length + 1;
 
-  render() {
+    let grid =  this.twoDimensionArray(rowLength, columnLength);
 
-    if (this.state.horizontalNumbers && this.state.verticalNumbers) {
-
-      return(
-        <Grid horizontalNumbers={this.state.horizontalNumbers} verticalNumbers={this.state.verticalNumbers}/>
-      )
+    for (var i = 0; i < rowLength; i++) { 
+      for (var j = 0; j < columnLength; j++) {
+        grid[i][j]=this.renderSquare(i, j, verticalNumbers[i-1], horizontalNumbers[j-1]);
+      }
     }
-  } 
-}
 
-
-class Grid extends React.Component{
-
-  constructor (props) {
-    console.log(props);
-    super(props);
-    this.state = {horizontalNumbers: props.horizontalNumbers, 
-      verticalNumbers: props.verticalNumbers};
+    return(
+      {grid}
+    );
   }
 
   renderSquare(xPos, yPos, xVal, yVal) {
@@ -107,7 +94,23 @@ class Grid extends React.Component{
       yPosition = {yPos}
       xValue = {xVal}
       yValue = {yVal} 
+      onContentChange = {this.handleContentChange.bind(this)}
     />)
+  }
+
+  updateSquare(xPos, yPos, xVal, yVal, content) {
+
+    console.log("updating square: ", content);
+
+    return (
+      < Square 
+        xPosition = {xPos}
+        yPosition = {yPos}
+        xValue = {xVal}
+        yValue = {yVal} 
+        content = {content}
+        onContentChange = {this.handleContentChange.bind(this)}
+      />)
   }
 
   twoDimensionArray(a, b) {
@@ -115,33 +118,47 @@ class Grid extends React.Component{
   
     // creating two dimensional array
     for (let i = 0; i< a; i++) {
-        for(let j = 0; j< b; j++) {
-            arr[i] = [];
-        }
+      for(let j = 0; j< b; j++) {
+        arr[i] = [];
+      }
     }
 
     return arr;
   }
 
+  handleContentChange(xPos, yPos, xVal, yVal, content) {
+
+    console.log(xPos, yPos, xVal, yVal, content);
+    let newGrid = this.state.grid;
+
+    newGrid[xPos][yPos] = this.updateSquare(xPos, yPos, xVal, yVal, content);
+
+    console.log(newGrid[xPos][yPos]);
+    this.setState({grid: newGrid});
+    console.log(this.state.grid[xPos][yPos]);
+  }
+
+  async componentDidMount() {
+    const horizontalNumbers = await invoke('get_random_array', {arraySize :12})
+    
+    const verticalNumbers = await invoke('get_random_array', {arraySize :12})
+
+    let grid = this.generateGrid(horizontalNumbers, verticalNumbers);
+
+    this.setState(grid);
+  }
+
   render() {
 
-    const rowLength = this.state.horizontalNumbers.length + 1;
-    const columnLength = this.state.verticalNumbers.length + 1;
+    if (this.state.grid) {
 
-    const grid =  this.twoDimensionArray(rowLength, columnLength);
-
-    for (var i = 0; i < rowLength; i++) { 
-      for(var j = 0; j < columnLength; j++) {
-        grid[i][j] = this.renderSquare(i, j, this.state.horizontalNumbers[i-1], this.state.verticalNumbers[j-1]);
-      }
+      return(
+        <div className='grid'>
+          {this.state.grid}
+        </div>
+      )
     }
-
-    return(
-      <div className = 'grid'>
-        {grid}
-      </div>
-    )
-  }
+  } 
 }
 
 // ================================================================================
