@@ -15,12 +15,12 @@ class App extends React.Component{
 
     constructor(props) {
       super(props);
-      this.state = {grid: []};
+      this.state = {grid: new Array(this.gridWidth).fill('').map(() => new Array(this.gridHeight).fill(''))};
     }
   
     generateGrid(horizontalNumbers, verticalNumbers) {
     
-        let newGrid = new Array(this.gridWidth).fill(undefined).map(() => new Array(this.gridHeight).fill(undefined));
+        let newGrid = new Array(this.gridWidth).fill('').map(() => new Array(this.gridHeight).fill(''));
 
         for (var i = 0; i < this.gridHeight; i++) { 
             for (var j = 0; j < this.gridWidth; j++) {
