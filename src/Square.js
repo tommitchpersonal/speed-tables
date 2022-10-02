@@ -7,11 +7,11 @@ class Square extends React.Component {
         super(props)
         this.handleChange=this.handleChange.bind(this);
         this.state = {};
-        }
+    }
 
     handleChange(e) {
         this.setState({value: e.target.value});
-        this.props.onContentChange(this.props.xPosition, this.props.yPosition, this.props.xValue, this.props.yValue, e.target.value);
+        this.props.onContentChange(this.props.xPosition, this.props.yPosition, e.target.value);
     }
 
     isCorrect() {
@@ -30,18 +30,19 @@ class Square extends React.Component {
         }
         else if (this.props.xPosition === 0) {
         color = 'grey';
-        content = this.props.yValue;
+        content = this.props.content;
         isEditable = false;
         }
         else if (this.props.yPosition === 0) {
         color = 'grey';
-        content = this.props.xValue;
+        content = this.props.content;
         isEditable = false;
         }
         else {
         let isCorrect = this.isCorrect();
         color = isCorrect ? 'green' : 'red';
         isEditable = !isCorrect;
+        content=this.props.content;
         }
 
         return( 

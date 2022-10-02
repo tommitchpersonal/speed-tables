@@ -1,79 +1,54 @@
 import React from 'react';
 import "./App.css";
-import Square, {Component} from './Square.js';
+import Grid from './Grid.js';
 
 const invoke = window.__TAURI__.invoke;
 
 class App extends React.Component{
 
+    numberOfHorizontalNumbers = 12;
+    numberOfVerticalNumbers = 12;
+
+    gridWidth = this.numberOfHorizontalNumbers + 1;
+    gridHeight = this.numberOfVerticalNumbers + 1;
+
+
     constructor(props) {
       super(props);
-      this.state = {
-      };
+      this.state = {grid: []};
     }
   
     generateGrid(horizontalNumbers, verticalNumbers) {
-      const rowLength = horizontalNumbers.length + 1;
-      const columnLength = verticalNumbers.length + 1;
-  
-      let grid =  this.twoDimensionArray(rowLength, columnLength);
-  
-      for (var i = 0; i < rowLength; i++) { 
-        for (var j = 0; j < columnLength; j++) {
-          grid[i][j]=this.renderSquare(i, j, verticalNumbers[i-1], horizontalNumbers[j-1]);
-        }
-      }
-  
-      return(
-        {grid}
-      );
-    }
-  
-    renderSquare(xPos, yPos, xVal, yVal) {
-      return (
-      < Square 
-        xPosition = {xPos}
-        yPosition = {yPos}
-        xValue = {xVal}
-        yValue = {yVal} 
-        onContentChange = {this.handleContentChange.bind(this)}
-      />)
-    }
-  
-    updateSquare(xPos, yPos, xVal, yVal, content) {
-  
-      console.log("updating square: ", content);
-  
-      return (
-        < Square 
-          xPosition = {xPos}
-          yPosition = {yPos}
-          xValue = {xVal}
-          yValue = {yVal} 
-          content = {content}
-          onContentChange = {this.handleContentChange.bind(this)}
-        />)
-    }
-  
-    twoDimensionArray(a, b) {
-      let arr = [];
     
-      // creating two dimensional array
-      for (let i = 0; i< a; i++) {
-        for(let j = 0; j< b; j++) {
-          arr[i] = [];
+        let newGrid = new Array(this.gridWidth).fill(undefined).map(() => new Array(this.gridHeight).fill(undefined));
+
+        for (var i = 0; i < this.gridHeight; i++) { 
+            for (var j = 0; j < this.gridWidth; j++) {
+                if (i===0 && j===0) {
+                    newGrid[i][j]="";
+                }
+                else if (i===0) {
+                    newGrid[i][j]=horizontalNumbers[j-1];
+                }
+                else if (j===0) {
+                    newGrid[i][j]=verticalNumbers[i-1];
+                }
+                else {
+                    newGrid[i][j]=undefined;
+                }
+            }
         }
-      }
-  
-      return arr;
+
+        return newGrid;
     }
+
+    handleContentChange(xPos, yPos, content) {
   
-    handleContentChange(xPos, yPos, xVal, yVal, content) {
-  
-      console.log(xPos, yPos, xVal, yVal, content);
+      console.log(xPos, yPos, content);
+      console.log(this.state.grid);
       let newGrid = this.state.grid;
   
-      newGrid[xPos][yPos] = this.updateSquare(xPos, yPos, xVal, yVal, content);
+      newGrid[xPos][yPos] = content;
   
       console.log(newGrid[xPos][yPos]);
       this.setState({grid: newGrid});
@@ -81,25 +56,24 @@ class App extends React.Component{
     }
   
     async componentDidMount() {
-      const horizontalNumbers = await invoke('get_random_array', {arraySize :12})
+      const horizontalNumbers = await invoke('get_random_array', {arraySize: this.numberOfHorizontalNumbers});
       
-      const verticalNumbers = await invoke('get_random_array', {arraySize :12})
+      const verticalNumbers = await invoke('get_random_array', {arraySize: this.numberOfVerticalNumbers});
   
-      let grid = this.generateGrid(horizontalNumbers, verticalNumbers);
-  
-      this.setState(grid);
+      const newGrid = this.generateGrid(horizontalNumbers, verticalNumbers);
+
+      this.setState({grid: newGrid});
     }
   
     render() {
-  
-      if (this.state.grid) {
-  
-        return(
-          <div className='grid'>
-            {this.state.grid}
-          </div>
-        )
-      }
+        if (this.state.grid) {   
+            return(
+                <Grid 
+                    grid={this.state.grid}
+                    onContentChange={this.handleContentChange.bind(this)}
+                />
+            )
+        }
     } 
   }
 
