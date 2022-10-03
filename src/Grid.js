@@ -13,6 +13,7 @@ class Grid extends React.Component {
             < Square 
                 xPosition = {xPos}
                 yPosition = {yPos}
+                key = {xPos + " " + yPos}
                 xValue = {xVal}
                 yValue = {yVal} 
                 content = {content}
@@ -22,9 +23,6 @@ class Grid extends React.Component {
     }
 
     render() {
-
-        console.log(this.props.grid);
-        
         let squares = [];
 
         for (var i = 0; i < this.props.grid.length; i++) {

@@ -34,7 +34,7 @@ class App extends React.Component{
                     newGrid[i][j]=verticalNumbers[i-1];
                 }
                 else {
-                    newGrid[i][j]=undefined;
+                    newGrid[i][j]="";
                 }
             }
         }
@@ -43,16 +43,11 @@ class App extends React.Component{
     }
 
     handleContentChange(xPos, yPos, content) {
-  
-      console.log(xPos, yPos, content);
-      console.log(this.state.grid);
       let newGrid = this.state.grid;
   
       newGrid[xPos][yPos] = content;
   
-      console.log(newGrid[xPos][yPos]);
       this.setState({grid: newGrid});
-      console.log(this.state.grid[xPos][yPos]);
     }
   
     async componentDidMount() {
