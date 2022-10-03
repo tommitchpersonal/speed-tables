@@ -1,8 +1,7 @@
 import React from 'react';
 import "./App.css";
 import Grid from './Grid.js';
-
-const invoke = window.__TAURI__.invoke;
+import BackendInterface from './BackendInterface';
 
 class App extends React.Component{
 
@@ -12,6 +11,7 @@ class App extends React.Component{
     gridWidth = this.numberOfHorizontalNumbers + 1;
     gridHeight = this.numberOfVerticalNumbers + 1;
 
+    backendInterface = new BackendInterface();
 
     constructor(props) {
       super(props);
@@ -51,9 +51,9 @@ class App extends React.Component{
     }
   
     async componentDidMount() {
-      const horizontalNumbers = await invoke('get_random_array', {arraySize: this.numberOfHorizontalNumbers});
+      const horizontalNumbers = await this.backendInterface.GenerateArray(this.numberOfHorizontalNumbers);
       
-      const verticalNumbers = await invoke('get_random_array', {arraySize: this.numberOfVerticalNumbers});
+      const verticalNumbers = await this.backendInterface.GenerateArray(this.numberOfVerticalNumbers);
   
       const newGrid = this.generateGrid(horizontalNumbers, verticalNumbers);
 

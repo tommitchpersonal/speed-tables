@@ -1,12 +1,15 @@
 import React from 'react';
 import'./Square.css';
+import BackendInterface from './BackendInterface';
 
 class Square extends React.Component {
+
+    backendInterface = new BackendInterface();
 
     constructor(props) {
         super(props)
         this.handleChange=this.handleChange.bind(this);
-        this.state = {value: ''};
+        this.state = {value: '', answerCorrect: false};
     }
 
     handleChange(e) {
@@ -14,8 +17,15 @@ class Square extends React.Component {
         this.props.onContentChange(this.props.xPosition, this.props.yPosition, e.target.value);
     }
 
-    isCorrect() {
-        return (this.state.value == this.props.xValue * this.props.yValue && this.state.value != '');
+    async componentDidUpdate() {
+
+        let isCorrect = await this.backendInterface.IsCorrect(this.state.value, this.props.xValue.toString(), this.props.yValue.toString())
+
+        console.log(isCorrect);
+
+        if (isCorrect && !this.state.answerCorrect) {
+            this.setState({answerCorrect: true});
+        }
     }
 
     render() {
@@ -35,7 +45,7 @@ class Square extends React.Component {
         isEditable = false;
         }
         else {
-        let isCorrect = this.isCorrect();
+        let isCorrect = this.state.answerCorrect;
         color = isCorrect ? 'green' : 'red';
         isEditable = !isCorrect;
         }
