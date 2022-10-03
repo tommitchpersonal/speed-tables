@@ -7,14 +7,17 @@ mod random_array_generator;
 mod answer_verifier;
 
 pub use crate::random_array_generator::generate_random_array;
-pub use crate::answer_verifier::parse_and_verify_answer;
+pub use crate::answer_verifier::check_answer;
+pub use crate::answer_verifier::verify_completion;
 
 fn main() {
   tauri::Builder::default()
-  .invoke_handler(tauri::generate_handler![get_random_array, verify_answer])
+  .invoke_handler(tauri::generate_handler![get_random_array, verify_answer, check_whether_completed])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
+
+// APIs:
 
 #[tauri::command]
 fn get_random_array(array_size: u32) -> Vec<u32> {
@@ -23,7 +26,12 @@ fn get_random_array(array_size: u32) -> Vec<u32> {
 
 #[tauri::command]
 fn verify_answer(answer: String, x_value: String, y_value: String) -> bool {
-  return parse_and_verify_answer(answer, x_value, y_value);
+  return check_answer(answer, x_value, y_value);
+}
+
+#[tauri::command]
+fn check_whether_completed(grid: Vec<Vec<String>>) -> bool {
+  return verify_completion(grid);
 }
 
 

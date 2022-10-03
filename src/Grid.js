@@ -1,5 +1,4 @@
 import React from 'react';
-import "./Grid.css";
 import Square from './Square.js';
 
 class Grid extends React.Component {

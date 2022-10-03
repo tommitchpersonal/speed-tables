@@ -19,9 +19,7 @@ class Square extends React.Component {
 
     async componentDidUpdate() {
 
-        let isCorrect = await this.backendInterface.IsCorrect(this.state.value, this.props.xValue.toString(), this.props.yValue.toString())
-
-        console.log(isCorrect);
+        let isCorrect = await this.backendInterface.isCorrect(this.state.value, this.props.xValue.toString(), this.props.yValue.toString())
 
         if (isCorrect && !this.state.answerCorrect) {
             this.setState({answerCorrect: true});
@@ -45,9 +43,8 @@ class Square extends React.Component {
         isEditable = false;
         }
         else {
-        let isCorrect = this.state.answerCorrect;
-        color = isCorrect ? 'green' : 'red';
-        isEditable = !isCorrect;
+        color = this.state.answerCorrect ? 'green' : 'red';
+        isEditable = !this.state.answerCorrect;
         }
 
         return( 
