@@ -15,7 +15,8 @@ class App extends React.Component{
 
     constructor(props) {
       super(props);
-      this.state = {grid: new Array(this.gridWidth).fill('').map(() => new Array(this.gridHeight).fill('')), isCompleted: false};
+      this.state = {grid: new Array(this.gridWidth).fill('').map(() => new Array(this.gridHeight).fill('')), 
+      isCompleted: false};
     }
   
     generateGrid(horizontalNumbers, verticalNumbers) {
@@ -71,14 +72,25 @@ class App extends React.Component{
     }
   
     render() {
-        if (this.state.grid) {   
-            return(
-                <Grid 
-                    grid={this.state.grid}
-                    onContentChange={this.handleContentChange.bind(this)}
-                />
+        if (!this.state.isCompleted) {
+            if (this.state.grid) {   
+                return(
+                    <Grid 
+                        grid={this.state.grid}
+                        onContentChange={this.handleContentChange.bind(this)}
+                    />
+                )
+            }
+        }
+        else {
+            return (
+                <div>
+                    You have completed the board!
+                </div>
             )
         }
+
+
     } 
   }
 
